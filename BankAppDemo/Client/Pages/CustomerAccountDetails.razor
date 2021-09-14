@@ -1,0 +1,114 @@
+﻿@page "/customeraccountdetails/{CustomerId:int}"
+@inherits CustomerAccountDetailsBase
+
+<h3>Konto @Customer.Givenname @Customer.Surname</h3>
+@if (Customer.AccountsList != null)
+{
+    @foreach (var item in Customer.AccountsList)
+    {
+        <div class="card align-content-center" style="width: 38rem;">
+            <div class="card-body">
+                <h5 class="card-title">@item.AccountId @item.AccountTypeName</h5>
+                <p class="card-text">Saldo: @item.Balance Kr</p>
+                <a @onclick="() => ShowTransactions(item)" class="btn btn-primary" style="margin-bottom:10px">Show Transaktioner</a>
+                <br />
+                @if (item.ShowTransaction)
+                {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Operation</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Typ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in item.Transactions)
+                            {
+                        <tr>
+                            <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@transaction.Operation</td>
+                            <td>@transaction.Amount</td>
+                            <td>@transaction.Type</td>
+                        </tr>
+                            }
+
+                    </tbody>
+                </table>
+                }
+
+                <EditForm Model="@Deposit" OnValidSubmit="() => HandleValidSubmitDeposit(item.AccountId)">
+                    <div class="form-group row" style="margin-bottom:10px">
+                        <div class="form-text">
+                            Make a deposit
+
+                            <div class="col-sm-10">
+                                <InputNumber id="accounttype" class="form-control" placeholder="Sum"
+                                             @bind-Value="@Deposit.Amount" />
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save deposit</button>
+                </EditForm>
+
+
+                <EditForm Model="@Deposit" OnValidSubmit="() => HandleValidSubmitWithdraw(item.AccountId)">
+                    <div class="form-group row" style="margin-bottom:10px">
+                        <div class="form-text">
+                            Make a withdrawal
+
+                            <div class="col-sm-10">
+                                <InputNumber id="accounttype" class="form-control" placeholder="Sum"
+                                             @bind-Value="@Deposit.Amount" />
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save withdrawal</button>
+                </EditForm>
+
+
+
+                <EditForm Model="@Deposit" OnValidSubmit="() => HandleValidSubmitCustomerTransfer(item.AccountId)">
+                    <div class="form-group row" style="margin-bottom:10px">
+                        <div class="col-sm-10">
+                            Write in account no to transfer to your account. Or to other customers account
+                            <InputNumber id="accounttype" class="form-control" placeholder="Account No"
+                                         @bind-Value="@Deposit.CustomerAccountId" />
+                        </div>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:10px">
+                        <div class="col-sm-10">
+                            Give amount to transfer
+                            <InputNumber id="accounttype" class="form-control" placeholder="Sum"
+                                         @bind-Value="@Deposit.Amount" />
+                        </div>
+                    </div>
+                    <label style="color:red">@Deposit.Error</label>
+                    <button type="submit" class="btn btn-primary">Transfer</button>
+                </EditForm>
+
+
+
+            </div>
+        </div>
+    }
+
+
+
+
+
+}
+
+
+

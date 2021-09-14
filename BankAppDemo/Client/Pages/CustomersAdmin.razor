@@ -1,0 +1,90 @@
+﻿@page "/customersadmin"
+@inherits CustomerAdminBase
+
+
+<h3>Admin Panel</h3>
+
+    @if (PendingCustomer.Count > 0)
+    {
+    <label>
+        Create Customer
+    </label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var customer in PendingCustomer)
+                            {
+            <tr>
+
+                <td>@customer.Givenname</td>
+                <td>@customer.Surname</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ApproveAsCustomer(customer)">Approve as Customer</button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ApproveAsAdmin(customer)">Approve as Admin</button>
+                </td>
+            </tr>}
+
+                        </tbody>
+                    </table>}
+    @if (Customers.Count > 0)
+    {
+    <label>
+        Manage Existing Customer
+    </label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Country</th>
+                                <th scope="col">City</th>
+
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var customer in Customers)
+                            {
+                            <tr>
+
+                                <td>@customer.Givenname</td>
+                                <td>@customer.Surname</td>
+                                <td>@customer.Emailaddress</td>
+                                <td>@customer.Country</td>
+                                <td>@customer.City</td> 
+
+                                <td>
+                                    <button class="btn btn-primary" @onclick="() => ShowAccountFormClicked(customer.CustomerId)">Create account</button>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-primary" @onclick="() => ApplyLoanOnClick(customer.CustomerId)"> Create Loan </button>
+                                </td>
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    }
+
+
+
+
+
+
+
+
+
+

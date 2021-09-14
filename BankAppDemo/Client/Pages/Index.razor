@@ -1,0 +1,188 @@
+﻿@page "/"
+@inherits IndexBase
+
+
+<AuthorizeView Roles="admin" Context="authContext">
+    <Authorized>
+        @if (NyCustomer != null)
+        {
+<div class="card">
+    <div class="card-body">
+        <h3>Admin: @NyCustomer.Givenname</h3>
+        <h4 class="bg-dark text-info">
+            As a admin, you can see all at customers can create new bank account, 
+            manage loan & approve transactions between customers.
+            Navigate to the Customer adminstering to manage the customers.
+            
+        </h4>
+    </div>
+</div>}
+
+    </Authorized>
+
+</AuthorizeView>
+
+
+<AuthorizeView Roles="customer" Context="authContext">
+    <Authorized>
+        @if (NyCustomer != null)
+        {
+<div>
+    <h2>Välkommen till Anas Bank</h2>
+</div>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@NyCustomer.Givenname @NyCustomer.Surname</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Personlig Information</h6>
+                            <a>@NyCustomer.Emailaddress</a>
+                            <br />
+                            <a>@NyCustomer.Streetaddress</a>
+
+                            <div>
+                                <a @onclick="CustomerAccountDetailsClick" class="btn btn-primary">Manage Account</a>
+                                <btn></btn>
+                            </div>
+
+                        </div>
+                    </div>}
+    </Authorized>
+
+</AuthorizeView>
+
+
+
+<AuthorizeView Roles="pending" Context="authContext">
+    <Authorized>
+
+
+
+        @if (!VisaInteEditForm)
+        {
+        <h1 class="display-3 text-center text-info bg-dark">Amal Bank</h1>
+        <p class="bg-transparent -primary text-white">This text is important.</p>
+                        <p class="bg-success text-white"></p>
+                        <p class="bg-info text-white"></p>
+                        <p class="bg-warning text-white"></p>
+                    <br />
+                    <p class="text-center bg-info text-white">Fill your details in order the get approved!</p>
+
+
+                                                           
+                                                                                   <EditForm Model="@NyCustomer" OnValidSubmit="HandleValidSubmit">
+                                                                                        <div class="row">
+                                                                                            <div class="col-3">
+                                                                                                <div>
+                                                                                                    <h2>Personal Account</h2>
+                                                                                                    <p>Best Personal account</p>
+                                                                                                    <img src="/images/Personalbanking.jpg" class="rounded-circle" alt="Cinque Terre" width="304" height="236">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                              <h3 class="display-2">Your details</h3>
+                                                                                                <hr />
+                                                                                                <div class="form-group">
+                                                                                                    <label for="firstName" class="form-label">
+                                                                                                        Förnamn
+                                                                                                    </label>
+
+                                                                                                    <InputText id="firstName" class="form-control" placeholder="fyll i förnamn"
+                                                                                                               @bind-Value="@NyCustomer.Givenname" />
+
+                                                                                                </div>
+                                                                                                <div class="form-group">
+                                                                                                    <label for="lastName" class="form-label">
+                                                                                                        Efternamn
+                                                                                                    </label>
+
+                                                                                                    <InputText id="lastName" class="form-control" placeholder="fyll i efternamn"
+                                                                                                               @bind-Value="NyCustomer.Surname" />
+
+
+                                                                                                </div>
+                                                                                                <div class="form-group">
+                                                                                                    <label for="lastName" class="form-label">
+                                                                                                        Land
+                                                                                                    </label>
+
+                                                                                                    <InputText id="lastName" class="form-control" placeholder="fyll i land"
+                                                                                                               @bind-Value="NyCustomer.Country" />
+
+
+                                                                                                </div>
+                                                                                                <div class="form-group">
+                                                                                                    <label for="lastName" class="form-label">
+                                                                                                        Stad
+                                                                                                    </label>
+
+                                                                                                    <InputText id="lastName" class="form-control" placeholder="fyll i stad"
+                                                                                                               @bind-Value="NyCustomer.City" />
+
+                                                                                                </div>
+                                                                                                <button type="submit" class="btn btn-primary">Spara</button>
+                                                                                            </div>
+                                                                                            <div class="col-3">
+                                                                                                <div>
+                                                                                                    <h2>Personal Finance</h2>
+                                                                                                    <p>Personal Finance</p>
+                                                                                                    <img src="/images/Business-Savings-Account - Copy.jpg" class="rounded-circle" alt="Cinque Terre" width="304" height="236">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </EditForm>}
+
+        @if (VisaInteEditForm)
+        {
+<h2 class="text-center">Tack så mycket  @NyCustomer.Givenname @NyCustomer.Surname. Nice. Admin will approve you shortly...!</h2>}
+
+
+    </Authorized>
+
+
+    <NotAuthorized>
+
+        @if (!IsAuthenticated)
+        {
+        <div class="jumbotron border-danger">
+            <h1 class="display-3 text-center text-info bg-dark">Anas Bank</h1>
+            <p class="lead text-center badge-warning text-white display-4">
+                Enjoy your life and do more with our wide range of financial products and services..
+            </p>
+            <div class="container">
+                <h2>How may we help you?</h2>
+                <p><strong>If you want open personal account</strong>. Navigate register and make a registration</p>
+                <p>If you want a saving account or get personal finance go and register</p>
+                <p><strong>Existing Customer?</strong> Go and login:</p>
+                <div class="card-deck">
+                    <div class="card bg-primary">
+                        <img src="/images/Personalbanking.jpg" class="rounded" alt="Cinque Terre">
+                        <h2 class="card-text">Open Your Saving Acount</h2>
+                        <p class="card-text">The .rounded class adds rounded corners to an image:</p>
+                    </div>
+                    <div class="card bg-secondary">
+
+                        <img src="/images/bank2.jfif" class="rounded" alt="Cinque Terre">
+                        <h2 class="card-text">Open Your Investering Acount</h2>
+                        <p class="card-text">The .rounded class adds rounded corners to an image:</p>
+                    </div>
+                    <div class="card bg-success">
+                        <img src="/images/Business-Savings-Account - Copy.jpg" class="rounded" alt="Cinque Terre">
+                        <h2 class="card-text">Open Your Peronal Acount</h2>
+                        <p class="card-text">
+                            We understand that your personal financial needs change as your day-to-day personal 
+                            circumstances change. With Anas Bank’s personal current account you can 
+                            enjoy more control, more benefits, and con
+                        </p>
+                    </div>
+                    <div class="card bg-info">
+                        <img src="/images/personal-current-account-thumb - Copy.jpg" class="rounded" alt="Cinque Terre">
+                        <h2 class="card-text">Open Your Business Acount</h2>
+                        <p class="card-text">The .rounded class adds rounded corners to an image:</p>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 text-sm-center">
+            <p>Are you our customer, go and login</p>
+
+        </div>}
+    </NotAuthorized>
+</AuthorizeView>
